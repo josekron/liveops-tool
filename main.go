@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	userService "liveops-tool/user/service"
+	userService "liveops-tool/user/services"
 	"net/http"
 	"strconv"
 
@@ -25,7 +25,7 @@ func setupRouter() *gin.Engine {
 
 		if err == nil {
 			var userDirectoryService = userService.NewService(userService.UserDirectory{})
-			var res = userDirectoryService.SearchUsers(numUsers, minScore, maxScore)
+			var res = userDirectoryService.GenerateUserListByScore(numUsers, minScore, maxScore)
 			c.JSON(http.StatusOK, gin.H{"users": res})
 		} else {
 			c.JSON(http.StatusBadRequest, gin.H{"users": "no valid"})

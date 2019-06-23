@@ -1,15 +1,14 @@
 package user
 
 import (
-	// "fmt"
-	userModel "liveops-tool/user/model"
+	models "liveops-tool/user/models"
 )
 
 type UserDirectory struct {
 }
 
-func (u UserDirectory) GetUsers() []userModel.User {
-	var users = []userModel.User{
+func (u UserDirectory) GetUsers() []models.User {
+	var users = []models.User{
 		{
 			ID:         "1",
 			Name:       "John",
@@ -39,13 +38,13 @@ func (u UserDirectory) GetUsers() []userModel.User {
 	return users
 }
 
-func (u UserDirectory) SearchUsers(numUsers, minScore, maxScore int) []userModel.User {
+func (u UserDirectory) SearchUsers(numUsers, minScore, maxScore int) []models.User {
 	return u.filterUsersByScore(numUsers, minScore, maxScore)
 }
 
-func (u UserDirectory) filterUsersByScore(numUsers, minScore, maxScore int) []userModel.User {
+func (u UserDirectory) filterUsersByScore(numUsers, minScore, maxScore int) []models.User {
 	var users = u.GetUsers()
-	var filteredUsers = []userModel.User{}
+	var filteredUsers = []models.User{}
 	var countUsers = 0
 	if len(users) < numUsers {
 		numUsers = len(users)
