@@ -7,7 +7,7 @@ import (
 type UserDirectory struct {
 }
 
-func (u UserDirectory) GetUsers() []models.User {
+func (u UserDirectory) getUsers() []models.User {
 	var users = []models.User{
 		{
 			ID:         "1",
@@ -43,7 +43,7 @@ func (u UserDirectory) SearchUsers(numUsers, minScore, maxScore int) []models.Us
 }
 
 func (u UserDirectory) filterUsersByScore(numUsers, minScore, maxScore int) []models.User {
-	var users = u.GetUsers()
+	var users = u.getUsers()
 	var filteredUsers = []models.User{}
 	var countUsers = 0
 	if len(users) < numUsers {
