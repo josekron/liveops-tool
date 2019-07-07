@@ -10,25 +10,25 @@ type UserDirectory struct {
 func (u UserDirectory) getUsers() []models.User {
 	var users = []models.User{
 		{
-			ID:         "1",
+			ID:         1,
 			Name:       "John",
 			Country:    "UK",
 			TotalScore: 500,
 		},
 		{
-			ID:         "2",
+			ID:         2,
 			Name:       "Frank",
 			Country:    "ES",
 			TotalScore: 1500,
 		},
 		{
-			ID:         "3",
+			ID:         3,
 			Name:       "Bob",
 			Country:    "UK",
 			TotalScore: 2000,
 		},
 		{
-			ID:         "4",
+			ID:         4,
 			Name:       "Anna",
 			Country:    "FR",
 			TotalScore: 3000,
@@ -39,10 +39,6 @@ func (u UserDirectory) getUsers() []models.User {
 }
 
 func (u UserDirectory) SearchUsers(numUsers, minScore, maxScore int) []models.User {
-	return u.filterUsersByScore(numUsers, minScore, maxScore)
-}
-
-func (u UserDirectory) filterUsersByScore(numUsers, minScore, maxScore int) []models.User {
 	var users = u.getUsers()
 	var filteredUsers = []models.User{}
 	var countUsers = 0

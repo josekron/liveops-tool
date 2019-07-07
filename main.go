@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	userDirectory "liveops-tool/user/dao"
 	userService "liveops-tool/user/services"
 	"net/http"
 	"strconv"
@@ -24,7 +25,7 @@ func setupRouter() *gin.Engine {
 		fmt.Printf("numUsers: %d , minScore: %d , maxScore: %d \n", numUsers, minScore, maxScore)
 
 		if err == nil {
-			var userDirectoryService = userService.NewService(userService.UserDirectory{})
+			var userDirectoryService = userService.NewService(userDirectory.UserPostgrestDirectory{})
 			var res = userDirectoryService.GenerateUserListByScore(numUsers, minScore, maxScore)
 			c.JSON(http.StatusOK, gin.H{"users": res})
 		} else {
