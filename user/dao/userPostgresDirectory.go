@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	models "liveops-tool/user/models"
+	"strings"
 
 	_ "github.com/lib/pq"
 )
@@ -52,8 +53,8 @@ func (u UserPostgrestDirectory) getUsers() []models.User {
 		fmt.Printf("%3v | %8v | %6v | %6v\n", id, name, country, total_score)
 		user := models.User{
 			ID:         id,
-			Name:       name,
-			Country:    country,
+			Name:       strings.TrimSpace(name),
+			Country:    strings.TrimSpace(country),
 			TotalScore: total_score,
 		}
 
@@ -87,8 +88,8 @@ func (u UserPostgrestDirectory) SearchUsers(numUsers, minScore, maxScore int) []
 		fmt.Printf("%3v | %8v | %6v | %6v\n", id, name, country, total_score)
 		user := models.User{
 			ID:         id,
-			Name:       name,
-			Country:    country,
+			Name:       strings.TrimSpace(name),
+			Country:    strings.TrimSpace(country),
 			TotalScore: total_score,
 		}
 
