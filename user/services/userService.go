@@ -1,18 +1,15 @@
 package user
 
 import (
+	dao "liveops-tool/user/dao"
 	models "liveops-tool/user/models"
 )
 
-type Directory interface {
-	SearchUsers(numUsers, minScore, maxScore int) []models.User
-}
-
 type UserService struct {
-	dir Directory
+	dir dao.Directory
 }
 
-func NewService(dir Directory) *UserService {
+func NewService(dir dao.Directory) *UserService {
 	var service = &UserService{
 		dir: dir,
 	}
