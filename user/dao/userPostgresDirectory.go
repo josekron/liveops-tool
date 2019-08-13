@@ -4,23 +4,24 @@ import (
 	"database/sql"
 	"fmt"
 	models "liveops-tool/user/models"
+	"os"
 	"strings"
 
 	_ "github.com/lib/pq"
 )
 
 const (
-	host     = "localhost"
-	port     = 5432
-	user     = "postgres"
-	password = "xxxx"
-	dbname   = "xxxx"
+	host = "localhost"
+	port = 5432
+	user = "postgres"
 )
 
 type UserPostgrestDirectory struct {
 }
 
 func (u UserPostgrestDirectory) getConnection() *sql.DB {
+	var password = os.Getenv("BD_PWD")
+	var dbname = os.Getenv("BD_NAME")
 	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+"password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
 	db, err := sql.Open("postgres", psqlInfo)
 	checkErr(err)
