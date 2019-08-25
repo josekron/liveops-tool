@@ -3,7 +3,6 @@ package user
 import (
 	"database/sql"
 	"fmt"
-	models "liveops-tool/user/models"
 	"os"
 	"strings"
 
@@ -29,7 +28,7 @@ func (u UserPostgrestDirectory) getConnection() *sql.DB {
 	return db
 }
 
-func (u UserPostgrestDirectory) getUsers() []models.User {
+func (u UserPostgrestDirectory) getUsers() []User {
 	db := u.getConnection()
 	defer db.Close()
 	err := db.Ping()
@@ -42,7 +41,7 @@ func (u UserPostgrestDirectory) getUsers() []models.User {
 		panic(err)
 	}
 
-	var users = []models.User{}
+	var users = []User{}
 	for rows.Next() {
 		var id int
 		var name string
@@ -52,7 +51,7 @@ func (u UserPostgrestDirectory) getUsers() []models.User {
 		checkErr(err)
 		fmt.Println("id | name | country | total_score ")
 		fmt.Printf("%3v | %8v | %6v | %6v\n", id, name, country, total_score)
-		user := models.User{
+		user := User{
 			ID:         id,
 			Name:       strings.TrimSpace(name),
 			Country:    strings.TrimSpace(country),
@@ -64,7 +63,7 @@ func (u UserPostgrestDirectory) getUsers() []models.User {
 	return users
 }
 
-func (u UserPostgrestDirectory) SearchUsers(numUsers, minScore, maxScore int) []models.User {
+func (u UserPostgrestDirectory) SearchUsers(numUsers, minScore, maxScore int) []User {
 	db := u.getConnection()
 	defer db.Close()
 	err := db.Ping()
@@ -77,7 +76,7 @@ func (u UserPostgrestDirectory) SearchUsers(numUsers, minScore, maxScore int) []
 		panic(err)
 	}
 
-	var users = []models.User{}
+	var users = []User{}
 	for rows.Next() {
 		var id int
 		var name string
@@ -87,7 +86,7 @@ func (u UserPostgrestDirectory) SearchUsers(numUsers, minScore, maxScore int) []
 		checkErr(err)
 		fmt.Println("id | name | country | total_score ")
 		fmt.Printf("%3v | %8v | %6v | %6v\n", id, name, country, total_score)
-		user := models.User{
+		user := User{
 			ID:         id,
 			Name:       strings.TrimSpace(name),
 			Country:    strings.TrimSpace(country),
