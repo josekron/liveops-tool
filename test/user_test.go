@@ -2,8 +2,7 @@ package test
 
 import (
 	"fmt"
-	userDirectory "liveops-tool/user/dao"
-	userService "liveops-tool/user/services"
+	user "liveops-tool/user"
 	"testing"
 )
 
@@ -15,7 +14,7 @@ const (
 
 func TestGenerateUserListByScore(t *testing.T) {
 
-	var userDirectoryService = userService.NewService(userDirectory.UserDirectory{})
+	var userDirectoryService = user.NewService(user.UserDirectory{})
 	var users = userDirectoryService.GenerateUserListByScore(numUsers, minScore, maxScore)
 	fmt.Printf("%v", users)
 
