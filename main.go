@@ -1,15 +1,21 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
-	user "liveops-tool/user"
+	"liveops-tool/user"
 	"net/http"
+	"os"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
 
-// var db = make(map[string]string)
+const (
+	hostDB = "localhost"
+	portDB = 5432
+	userDB = "postgres"
+)
 
 func setupRouter() *gin.Engine {
 	// Disable Console Color
@@ -24,8 +30,13 @@ func setupRouter() *gin.Engine {
 		fmt.Printf("numUsers: %d , minScore: %d , maxScore: %d \n", numUsers, minScore, maxScore)
 
 		if err == nil {
-			var userDirectoryService = user.NewService(user.UserPostgrestDirectory{})
+
+			db := getConnection()
+			checkErr(err)
+
+			var userDirectoryService = user.NewService(user.UserPostgrestDirectory{Database: db})
 			var res = userDirectoryService.GenerateUserListByScore(numUsers, minScore, maxScore)
+
 			c.JSON(http.StatusOK, gin.H{"users": res})
 		} else {
 			c.JSON(http.StatusBadRequest, gin.H{"users": "no valid"})
@@ -33,60 +44,23 @@ func setupRouter() *gin.Engine {
 
 	})
 
-	// Test Enpoints
-
-	// Ping test
-	// r.GET("/ping", func(c *gin.Context) {
-	// 	c.String(http.StatusOK, "pong")
-	// })
-
-	// Get user value
-	// r.GET("/user", func(c *gin.Context) {
-	// 	res := []string{}
-	// 	for k, v := range db {
-	// 		res = append(res, k, v)
-	// 	}
-	// 	c.JSON(http.StatusOK, gin.H{"users": res})
-	// })
-
-	// Get user value
-	// r.GET("/user/:name", func(c *gin.Context) {
-	// 	user := c.Params.ByName("name")
-	// 	value, ok := db[user]
-	// 	if ok {
-	// 		c.JSON(http.StatusOK, gin.H{"user": user, "value": value})
-	// 	} else {
-	// 		c.JSON(http.StatusOK, gin.H{"user": user, "status": "no value"})
-	// 	}
-	// })
-
-	// Authorized group (uses gin.BasicAuth() middleware)
-	// Same than:
-	// authorized := r.Group("/")
-	// authorized.Use(gin.BasicAuth(gin.Credentials{
-	//	  "foo":  "bar",
-	//	  "manu": "123",
-	//}))
-	// authorized := r.Group("/", gin.BasicAuth(gin.Accounts{
-	// 	"foo":  "bar", // user:foo password:bar
-	// 	"manu": "123", // user:manu password:123
-	// }))
-
-	// authorized.POST("admin", func(c *gin.Context) {
-	// 	user := c.MustGet(gin.AuthUserKey).(string)
-	// 	fmt.Printf(user + "\n")
-	// 	// Parse JSON
-	// 	var json struct {
-	// 		Value string `json:"value" binding:"required"`
-	// 	}
-
-	// 	if c.Bind(&json) == nil {
-	// 		db[user] = json.Value
-	// 		c.JSON(http.StatusOK, gin.H{"status": "ok"})
-	// 	}
-	// })
-
 	return r
+}
+
+func getConnection() *sql.DB {
+	var pwdDB = os.Getenv("BD_PWD")
+	var nameDB = os.Getenv("BD_NAME")
+	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+"password=%s dbname=%s sslmode=disable", hostDB, portDB, userDB, pwdDB, nameDB)
+	db, err := sql.Open("postgres", psqlInfo)
+	checkErr(err)
+
+	return db
+}
+
+func checkErr(err error) {
+	if err != nil {
+		panic(err)
+	}
 }
 
 func main() {
