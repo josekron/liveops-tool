@@ -3,43 +3,19 @@ package user
 import (
 	"database/sql"
 	"fmt"
-	"os"
 	"strings"
 
 	_ "github.com/lib/pq"
 )
 
-const (
-	host = "localhost"
-	port = 5432
-	user = "postgres"
-)
-
 type UserPostgrestDirectory struct {
-}
-
-func (u UserPostgrestDirectory) getConnection() *sql.DB {
-	var password = os.Getenv("BD_PWD")
-	var dbname = os.Getenv("BD_NAME")
-	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+"password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
-	db, err := sql.Open("postgres", psqlInfo)
-	checkErr(err)
-
-	return db
+	Database *sql.DB
 }
 
 func (u UserPostgrestDirectory) getUsers() []User {
-	db := u.getConnection()
-	defer db.Close()
-	err := db.Ping()
+
+	rows, err := u.Database.Query("SELECT * FROM users")
 	checkErr(err)
-
-	fmt.Println("Successfully connected!")
-
-	rows, err := db.Query("SELECT * FROM users")
-	if err != nil {
-		panic(err)
-	}
 
 	var users = []User{}
 	for rows.Next() {
@@ -64,17 +40,9 @@ func (u UserPostgrestDirectory) getUsers() []User {
 }
 
 func (u UserPostgrestDirectory) SearchUsers(numUsers, minScore, maxScore int) []User {
-	db := u.getConnection()
-	defer db.Close()
-	err := db.Ping()
+
+	rows, err := u.Database.Query("SELECT * FROM users WHERE total_score >= $1 AND total_score <= $2 LIMIT $3", minScore, maxScore, numUsers)
 	checkErr(err)
-
-	fmt.Println("Successfully connected!")
-
-	rows, err := db.Query("SELECT * FROM users WHERE total_score >= $1 AND total_score <= $2 LIMIT $3", minScore, maxScore, numUsers)
-	if err != nil {
-		panic(err)
-	}
 
 	var users = []User{}
 	for rows.Next() {
