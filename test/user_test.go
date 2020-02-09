@@ -2,8 +2,9 @@ package test
 
 import (
 	"fmt"
-	user "liveops-tool/user"
 	"testing"
+
+	"github.com/josekron/liveops-tool/user"
 )
 
 const (
