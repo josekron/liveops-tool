@@ -3,7 +3,7 @@ package user
 type UserDirectory struct {
 }
 
-func (u UserDirectory) getUsers() []User {
+func (u UserDirectory) getUsers() ([]User, error) {
 	var users = []User{
 		{
 			ID:         1,
@@ -31,11 +31,11 @@ func (u UserDirectory) getUsers() []User {
 		},
 	}
 
-	return users
+	return users, nil
 }
 
-func (u UserDirectory) SearchUsers(numUsers, minScore, maxScore int) []User {
-	var users = u.getUsers()
+func (u UserDirectory) SearchUsers(numUsers, minScore, maxScore int) ([]User, error) {
+	var users, _ = u.getUsers()
 	var filteredUsers = []User{}
 	var countUsers = 0
 	if len(users) < numUsers {
@@ -51,5 +51,5 @@ func (u UserDirectory) SearchUsers(numUsers, minScore, maxScore int) []User {
 			break
 		}
 	}
-	return filteredUsers
+	return filteredUsers, nil
 }

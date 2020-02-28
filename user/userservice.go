@@ -12,6 +12,6 @@ func NewService(dir Directory) *UserService {
 }
 
 // GenerateUserListByScore returns a list of users for a tournament
-func (u UserService) GenerateUserListByScore(numUsers, minScore, maxScore int) []User {
+func (u UserService) GenerateUserListByScore(numUsers, minScore, maxScore int) ([]User, error) {
 	return u.dir.SearchUsers(numUsers, minScore, maxScore)
 }
