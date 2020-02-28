@@ -1,5 +1,5 @@
 package user
 
 type Directory interface {
-	SearchUsers(numUsers, minScore, maxScore int) []User
+	SearchUsers(numUsers, minScore, maxScore int) ([]User, error)
 }

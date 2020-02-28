@@ -2,9 +2,8 @@ package test
 
 import (
 	"fmt"
+	"liveops-tool/user"
 	"testing"
-
-	"github.com/josekron/liveops-tool/user"
 )
 
 const (
@@ -16,10 +15,10 @@ const (
 func TestGenerateUserListByScore(t *testing.T) {
 
 	var userDirectoryService = user.NewService(user.UserDirectory{})
-	var users = userDirectoryService.GenerateUserListByScore(numUsers, minScore, maxScore)
+	var users, err = userDirectoryService.GenerateUserListByScore(numUsers, minScore, maxScore)
 	fmt.Printf("%v", users)
 
-	if len(users) != 1 {
+	if len(users) != 1 || err != nil {
 		t.Errorf("Expected users list length = %d, but it was %d instead.", numUsers, len(users))
 	}
 
@@ -27,10 +26,10 @@ func TestGenerateUserListByScore(t *testing.T) {
 		t.Errorf("Expected total score between %d and %d , but it was %d instead.", minScore, maxScore, users[0].TotalScore)
 	}
 
-	users = userDirectoryService.GenerateUserListByScore(numUsers+1, 0, maxScore)
+	users, err = userDirectoryService.GenerateUserListByScore(numUsers+1, 0, maxScore)
 	fmt.Printf("%v", users)
 
-	if len(users) != 2 {
+	if len(users) != 2 || err != nil {
 		t.Errorf("Expected users list length = %d, but it was %d instead.", numUsers, len(users))
 	}
 }

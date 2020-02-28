@@ -3,12 +3,12 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"liveops-tool/user"
 	"net/http"
 	"os"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/josekron/liveops-tool/user"
 )
 
 const (
@@ -32,14 +32,18 @@ func setupRouter() *gin.Engine {
 		if err == nil {
 
 			db := getConnection()
-			checkErr(err)
 
 			var userDirectoryService = user.NewService(user.UserPostgrestDirectory{Database: db})
-			var res = userDirectoryService.GenerateUserListByScore(numUsers, minScore, maxScore)
+			var res, err = userDirectoryService.GenerateUserListByScore(numUsers, minScore, maxScore)
 
-			c.JSON(http.StatusOK, gin.H{"users": res})
+			if err != nil {
+				c.JSON(503, gin.H{"error": "db error"})
+			} else {
+				c.JSON(http.StatusOK, gin.H{"users": res})
+			}
+
 		} else {
-			c.JSON(http.StatusBadRequest, gin.H{"users": "no valid"})
+			c.JSON(http.StatusBadRequest, gin.H{"error": "request not valid"})
 		}
 
 	})
