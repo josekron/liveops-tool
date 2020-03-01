@@ -3,12 +3,12 @@ package main
 import (
 	"database/sql"
 	"fmt"
-	"liveops-tool/user"
 	"net/http"
 	"os"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/josekron/liveops-tool/user"
 )
 
 const (
