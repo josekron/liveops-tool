@@ -15,7 +15,17 @@ Create a new table for users:
     CONSTRAINT users_pkey PRIMARY KEY (id)
 )`
 
+### Run
+
 run `BD_NAME=XXX BD_PWD=XXX go run main.go`
+
+##### Docker
+
+`docker build -t liveopsdocker .`
+
+`docker run -p 8080:8080 liveopsdocker`
+
+### Notes
 
 If you don't want to install PostgreSQL, you can replace _UserPostgrestDirectory_ with _UserDirectory_.
 
